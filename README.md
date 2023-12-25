@@ -12,3 +12,7 @@ This is ui for medium clone app based on [RealWorld](https://github.com/gothinks
 - [react-router-dom](https://reactrouter.com/en/main)
 - [redux](https://redux.js.org/)
 - [axios](https://axios-http.com/)
+
+## License
+
+MIT
