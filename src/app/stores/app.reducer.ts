@@ -7,8 +7,7 @@ const initialState: AppState = {
   loading: true,
   error: false,
   errorMessage: '',
-  isAuthenticated: true,
-  userId: -1,
+  isAuthenticated: false,
   userName: '',
   avatar_url: undefined,
 };
@@ -18,23 +17,16 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state, action: PayloadAction<UserInfo>) => {
-      const { id, verified, username, image } = action.payload;
-      if (!verified) {
-        state.error = true;
-        state.errorMessage = 'Your account is pending verification by admin.';
-      } else {
-        state.isAuthenticated = true;
-        state.userId = id;
-        state.userName = username;
-        state.avatar_url = image || '';
-      }
+      const { username, image } = action.payload;
+      state.isAuthenticated = true;
+      state.userName = username;
+      state.avatar_url = image || '';
     },
     logout: (state) => {
       state.loading = false;
       state.error = false;
       state.errorMessage = '';
       state.isAuthenticated = false;
-      state.userId = -1;
       state.userName = '';
       localStorage.removeItem('token');
     },
@@ -54,10 +46,7 @@ const appSlice = createSlice({
   },
 });
 export const appReducer = appSlice.reducer;
-export const {
-  logout,
-  loginSuccess,
-} = appSlice.actions;
+export const { logout, loginSuccess } = appSlice.actions;
 
 export const selectAppLoading = (state: RootState) => state.app.loading;
 export const selectAppError = (state: RootState) => state.app.error;

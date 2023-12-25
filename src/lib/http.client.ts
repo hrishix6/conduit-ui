@@ -1,4 +1,4 @@
-import { ApiResult, AppErrorCode } from '@/app';
+import { AppErrorCode } from '@/app';
 import axios, { AxiosError } from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL as string;
@@ -15,7 +15,7 @@ export const getClient = () =>
 export function handleAxiosError(err: any) {
   if (err instanceof AxiosError) {
     if (err.response) {
-      const errorPayload = err.response.data as ApiResult<any>;
+      const errorPayload = err.response.data as any;
       return errorPayload.errorCode;
     }
   }

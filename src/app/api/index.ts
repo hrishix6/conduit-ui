@@ -1,16 +1,15 @@
-import { getClient, handleAxiosError } from "@/lib/http.client";
-import { ApiResult, UserInfo } from "..";
+import { getClient, handleAxiosError } from '@/lib/http.client';
+import { UserInfo } from '..';
 
-export async function getUserInfo()
-{
-    try {
-        const client = getClient();
-
-        const response = await client.get("/user");
-
-        return response.data as ApiResult<UserInfo>;
-
-    } catch (error) {
-        throw handleAxiosError(error);
+export async function getUserInfo() {
+  try {
+    const client = getClient();
+    const response = await client.get('/user');
+    if (response.data && response.data.user) {
+      return response.data.user as UserInfo;
     }
+    return null;
+  } catch (error) {
+    throw handleAxiosError(error);
+  }
 }
