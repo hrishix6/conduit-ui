@@ -14,6 +14,7 @@ import HomePage from '@/routes/home.page';
 import { SignUpPage } from '@/features/auth/routes/sign.up.page';
 import EditorPage from '@/features/editor/routes/editor.page';
 import { ArticleDetail } from '@/features/article';
+import { UserProfilePage } from '@/features/profile';
 
 export function App() {
   const dispatch = useAppDispatch();
@@ -41,6 +42,7 @@ export function App() {
       <Route path="/editor" element={<EditorPage />} />
       <Route path="/article" />
       <Route path="/article/:slug" element={<ArticleDetail />} />
+      <Route path="/profile/:username" element={<UserProfilePage />} />
     </Routes>
   );
 }

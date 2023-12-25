@@ -45,7 +45,11 @@ export function ArticleListItem({ data, handleFavourite }: Props) {
               <User className="h-5 w-5" />
             )}
             <div className="flex items-center">
-              <p className="text-primary text-lg font-semibold">{username}</p>
+              <Link to={`/profile/${username}`}>
+                <p className="text-primary text-lg font-semibold hover:underline">
+                  {username}
+                </p>
+              </Link>
               <span className="mx-2">&#8226;</span>
               <p className="text-sm text-muted-foreground">
                 {formatArticleCreatedDate(createdAt)}
