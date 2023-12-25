@@ -13,6 +13,26 @@ This is ui for medium clone app based on [RealWorld](https://github.com/gothinks
 - [redux](https://redux.js.org/)
 - [axios](https://axios-http.com/)
 
+## How to run
+
+1. Create a `.env` file in the project root and add backend url like so ,
+
+   ```text
+   VITE_API_URL=http://localhost:5000/api
+   ```
+
+2. Install dependencies
+
+   ```shell
+   $ npm install
+   ```
+
+3. Run & visit http://localhost:5173
+
+   ```shell
+   $ npm run dev
+   ```
+
 ## License
 
 MIT
