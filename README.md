@@ -13,6 +13,10 @@ This is ui for medium clone app based on [RealWorld](https://github.com/gothinks
 - [redux](https://redux.js.org/)
 - [axios](https://axios-http.com/)
 
+## Status
+
+This is still in progress.
+
 ## How to run
 
 1. Create a `.env` file in the project root and add backend url like so ,
