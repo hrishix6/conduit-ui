@@ -4,9 +4,11 @@ import {
   selectTagTab,
   setCurrentTab,
 } from '../stores/feed.reducer';
+import { selectIsAuthenticated } from '@/app';
 
 export default function FeedTabs() {
   const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const currentFeedTab = useAppSelector(selectCurrentTab);
   const tagTab = useAppSelector(selectTagTab);
 
@@ -20,7 +22,7 @@ export default function FeedTabs() {
             : 'text-base text-muted-foreground'
         } hover:cursor-pointer p-2`}
       >
-        #global feed
+        {isAuthenticated ? '#your feed' : '#Global feed'}
       </div>
       {tagTab ? (
         <div

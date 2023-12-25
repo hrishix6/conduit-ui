@@ -13,6 +13,7 @@ import { LoginPage } from '@/features/auth';
 import HomePage from '@/routes/home.page';
 import { SignUpPage } from '@/features/auth/routes/sign.up.page';
 import EditorPage from '@/features/editor/routes/editor.page';
+import { ArticleDetail } from '@/features/article';
 
 export function App() {
   const dispatch = useAppDispatch();
@@ -38,6 +39,8 @@ export function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<SignUpPage />} />
       <Route path="/editor" element={<EditorPage />} />
+      <Route path="/article" />
+      <Route path="/article/:slug" element={<ArticleDetail />} />
     </Routes>
   );
 }

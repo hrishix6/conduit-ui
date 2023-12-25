@@ -6,16 +6,19 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAppDispatch } from '@/hooks';
 import { setCurrentTab } from '@/features/feed/stores/feed.reducer';
+import { Link } from 'react-router-dom';
 
 interface Props {
   data: Article;
+  handleFavourite: (article: Article) => void;
 }
 
-export function ArticleListItem({ data }: Props) {
+export function ArticleListItem({ data, handleFavourite }: Props) {
   const dispatch = useAppDispatch();
 
   const {
     author,
+    slug,
     createdAt,
     favorited,
     favoritesCount,
@@ -49,19 +52,26 @@ export function ArticleListItem({ data }: Props) {
               </p>
             </div>
           </section>
-          <Button variant={'outline'}>
-            <Heart
-              className={`h-5 w-5 mr-2 ${favorited ? 'text-primary' : ''}`}
-            />
+          <Button
+            variant={`${favorited ? 'default' : 'outline'}`}
+            onClick={() => {
+              handleFavourite(data);
+            }}
+          >
+            <Heart className={`h-5 w-5 mr-2`} />
             <span>{favoritesCount}</span>
           </Button>
         </header>
-        <section className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold">{title}</h2>
-          <p className="text-muted-foreground">{description}</p>
-        </section>
+        <Link to={`/article/${slug}`}>
+          <section className="flex flex-col gap-1">
+            <h2 className="text-xl font-semibold">{title}</h2>
+            <p className="text-muted-foreground">{description}</p>
+          </section>
+        </Link>
         <footer className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">Read more...</p>
+          <Link to={`/article/${slug}`}>
+            <p className="text-sm text-muted-foreground">Read more...</p>
+          </Link>
           <div className="flex items-center gap-2 flex-wrap">
             {tagList.map((x, i) => (
               <Badge

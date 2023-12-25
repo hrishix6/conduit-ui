@@ -8,7 +8,9 @@ export const getClient = () =>
     baseURL: API_URL,
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      ...(localStorage.getItem('token')
+        ? { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        : {}),
     },
   });
 
