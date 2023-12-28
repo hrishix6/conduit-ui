@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   addArticleToFavourites,
   loadingArticleDetail,
@@ -16,11 +16,16 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import ArticleCommentSection from './article.comment.section';
 import { followAuthor, unfollowAuthor } from '@/features/profile';
+import { useAppSelector } from '@/hooks';
+import { selectIsAuthenticated } from '@/app';
 
 export function ArticleDetail() {
   const { slug } = useParams();
   const [article, setArticle] = useState<Article | null>(null);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const [loading, setLoading] = useState(true);
+  const [performingFollow, setPerformingFollow] = useState(false);
+  const [performingFav, setPerformingFav] = useState(false);
 
   useEffect(() => {
     if (slug) {
@@ -43,6 +48,7 @@ export function ArticleDetail() {
 
   async function handleArticleFavourite() {
     try {
+      setPerformingFav(true);
       const remove = article!.favorited;
       let updatedArticle: Article | null = null;
 
@@ -58,10 +64,14 @@ export function ArticleDetail() {
     } catch (error) {
       console.log(error);
     }
+    finally {
+      setPerformingFav(false);
+    }
   }
 
   async function handleAuthorFollow() {
     try {
+      setPerformingFollow(true);
       const remove = article!.author?.following;
       let updatedAuthor: Author | null = null;
 
@@ -82,6 +92,8 @@ export function ArticleDetail() {
       }
     } catch (error) {
       console.log(error);
+    }finally {
+      setPerformingFollow(false);
     }
   }
 
@@ -99,10 +111,10 @@ export function ArticleDetail() {
     <Layout>
       {article ? (
         <div className="mb-10">
-          <header className="bg-background">
+          <header className="border-b border-t bg-secondary">
             <Container>
               <section className="py-6 px-2 xl:px-0 flex flex-col gap-4 justify-center">
-                <h1 className="text-3xl font-bold">{article.title}</h1>
+                <h1 className="text-2xl font-bold">{article.title}</h1>
                 <div className="flex items-center gap-3 flex-wrap">
                   <section className="flex gap-1 items-center">
                     {article.author?.image ? (
@@ -119,19 +131,24 @@ export function ArticleDetail() {
                       <User className="h-5 w-5" />
                     )}
                     <div className="flex items-center">
-                      <p className="text-primary text-lg font-semibold">
+                      <Link to={`/profile/${article.author?.username}`}>
+                      <p className="text-primary text-lg font-semibold hover:underline">
                         {article.author?.username}
                       </p>
+                      </Link>
                       <span className="mx-2">&#8226;</span>
                       <p className="text-sm text-muted-foreground">
                         {formatArticleCreatedDate(article.createdAt)}
                       </p>
                     </div>
                   </section>
-                  <Button
+                  {isAuthenticated && (
+                    <>
+                    <Button
                     variant={`${
-                      article.author?.following ? 'default' : 'outline'
+                      article.author?.following ? 'default' : 'ghost'
                     }`}
+                    disabled={performingFollow}
                     onClick={() => handleAuthorFollow()}
                   >
                     <Plus className="h-5 w-5 mr-2" />
@@ -141,8 +158,9 @@ export function ArticleDetail() {
                     </span>
                   </Button>
                   <Button
-                    variant={`${article.favorited ? 'default' : 'outline'}`}
+                    variant={`${article.favorited ? 'default' : 'ghost'}`}
                     onClick={() => handleArticleFavourite()}
+                    disabled={performingFav}
                   >
                     <Heart className="h-5 w-5 mr-2" />
                     <span>
@@ -152,9 +170,10 @@ export function ArticleDetail() {
                       ({article.favoritesCount})
                     </span>
                   </Button>
+                    </>
+                  )}
                 </div>
               </section>
-              <hr />
             </Container>
           </header>
           <section>

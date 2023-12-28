@@ -139,7 +139,9 @@ export default function ArticleCommentSection() {
                 ) : (
                   <User className="h-4 w-4" />
                 )}
-                <p className="text-sm text-primary">{x.author.username}</p>
+                <Link to={`/profile/${x.author.username}`}>
+                <p className="text-sm text-primary hover:underline">{x.author.username}</p>
+                </Link>
                 <span className="block">&#8226;</span>
                 <p className="text-sm text-muted-foreground">
                   {formatArticleCreatedDate(x.createdAt)}

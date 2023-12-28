@@ -79,3 +79,7 @@
 *::-webkit-scrollbar-thumb {
   background-color: hsl(var(--primary));
 }
+
+#root {
+  overflow-x: hidden;
+}

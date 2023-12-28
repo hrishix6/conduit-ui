@@ -26,3 +26,16 @@ export async function unfollowAuthor(username: string) {
     throw handleAxiosError(error);
   }
 }
+
+export async function getUserProfile(username: string) {
+  try {
+    const client = getClient();
+    const response = await client.get(`/profiles/${username}`);
+    if (response.data && response.data.profile) {
+      return response.data.profile as Profile;
+    }
+    return null;
+  } catch (error) {
+    throw handleAxiosError(error);
+  }
+}

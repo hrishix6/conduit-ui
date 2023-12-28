@@ -8,7 +8,7 @@ interface Props {
 
 export function Layout({ children }: Props) {
   return (
-    <div>
+    <div className='overflow-x-hidden'>
       <Navbar />
       <main className="mb-10">{children}</main>
       <Footer />

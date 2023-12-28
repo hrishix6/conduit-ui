@@ -43,6 +43,10 @@ export function App() {
       <Route path="/article" />
       <Route path="/article/:slug" element={<ArticleDetail />} />
       <Route path="/profile/:username" element={<UserProfilePage />} />
+      <Route
+        path="/profile/:username/favourite"
+        element={<UserProfilePage />}
+      />
     </Routes>
   );
 }

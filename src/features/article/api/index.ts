@@ -26,6 +26,32 @@ export async function loadArticals(
   }
 }
 
+export async function loadArticlesForUser(
+  offset: number,
+  limit: number,
+  username: string,
+  kind: 'author' | 'favorited'
+) {
+  try {
+    const client = getClient();
+    const query = new URLSearchParams({
+      offset: `${offset}`,
+      limit: `${limit}`,
+      [kind]: username,
+    }).toString();
+
+    const response = await client.get(`/articles?${query}`);
+
+    if (response.data && response.data.articles) {
+      return response.data.articles as Article[];
+    }
+
+    return null;
+  } catch (error) {
+    throw handleAxiosError(error);
+  }
+}
+
 export async function loadTags() {
   try {
     const client = getClient();

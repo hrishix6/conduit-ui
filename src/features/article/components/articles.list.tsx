@@ -7,22 +7,26 @@ import {
   loadFeed,
   removeArticleFromFavourites,
 } from '../api';
-import { Loader } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader } from 'lucide-react';
 import { useAppSelector } from '@/hooks';
 import { selectCurrentTab } from '@/features/feed/stores/feed.reducer';
 import FeedTabs from '@/features/feed/components/feed.tabs';
-import JohnTrevoltaGif from '@/assets/giphy.gif';
 import { selectIsAuthenticated } from '@/app';
+import { Empty } from '@/components/ui/empty';
+import { Button } from '@/components/ui/button';
 const LIMIT = 20;
 
 export function ArticlesList() {
   const [articles, setArticles] = useState<Article[]>([]);
-  const [offset] = useState(0);
+  const [page, setPage] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const currentTab = useAppSelector(selectCurrentTab);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const [performingFav, setPerformingFav] = useState(0);
 
   useEffect(() => {
+    const offset = (page - 1) * LIMIT;
+
     if (isAuthenticated) {
       if (currentTab == 'global_feed') {
         getFeed(offset, LIMIT);
@@ -36,7 +40,7 @@ export function ArticlesList() {
         getArticles(offset, LIMIT, currentTab);
       }
     }
-  }, [currentTab, offset, isAuthenticated]);
+  }, [currentTab, page, isAuthenticated]);
 
   async function getArticles(offset: number, limit: number, tag?: string) {
     setLoading(true);
@@ -66,8 +70,9 @@ export function ArticlesList() {
     }
   }
 
-  async function handleArticleFavourite(article: Article) {
+  async function handleArticleFavourite(article: Article, index: number) {
     try {
+      setPerformingFav(index);
       const remove = article!.favorited;
       let updatedArticle: Article | null = null;
       const slug = article.slug;
@@ -90,42 +95,63 @@ export function ArticlesList() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setPerformingFav(0);
     }
   }
 
+  let component;
+
   if (loading) {
-    return (
-      <div className="flex-1 flex flex-col gap-4">
-        <FeedTabs />
-        <div className="flex-1 flex items-center justify-center">
-          <Loader className="h-6 w-6 text-primary animate-spin" />
-        </div>
+    component = (
+      <div className="flex-1 flex items-center justify-center mt-4">
+        <Loader className="h-6 w-6 text-primary animate-spin" />
       </div>
     );
+  } else {
+    if (articles.length > 0) {
+      component = articles.map((x, i) => (
+        <ArticleListItem
+          index={i}
+          handleFavourite={handleArticleFavourite}
+          key={x.slug}
+          data={x}
+          performingFavourite={performingFav}
+        />
+      ));
+    } else {
+      component = (
+        <div className="w-2/3 mx-auto mt-4">
+          <Empty />
+        </div>
+      );
+    }
   }
 
   return (
-    <section className="flex-1 flex flex-col gap-4">
-      <FeedTabs />
-      {articles.length > 0 ? (
-        articles.map((x) => (
-          <>
-            <ArticleListItem
-              handleFavourite={handleArticleFavourite}
-              key={x.slug}
-              data={x}
-            />
-          </>
-        ))
-      ) : (
-        <div className="flex justify-center">
-          <img
-            src={JohnTrevoltaGif}
-            className="flex-1 h-auto"
-            alt="it is empty"
-          />
+    <section className="flex-1 flex flex-col">
+      <header className="flex flex-col gap-2">
+        <div className="flex gap-3 justify-end items-center">
+          <Button
+            variant={'outline'}
+            size={'sm'}
+            disabled={page == 1}
+            onClick={() => setPage((prev) => prev - 1)}
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <p className="text-base">{page}</p>
+          <Button
+            variant={'outline'}
+            size={'sm'}
+            onClick={() => setPage((prev) => prev + 1)}
+          >
+            <ChevronRight className="h-5 w-5" />
+          </Button>
         </div>
-      )}
+        <FeedTabs />
+      </header>
+      {component}
     </section>
   );
 }
