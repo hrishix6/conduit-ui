@@ -127,7 +127,7 @@ export default function ArticleCommentSection() {
         articleComments.map((x) => (
           <div key={x.id}>
             <p className="p-2 border">{x.body}</p>
-            <div className="bg-secondary flex p-2 items-center justify-between">
+            <div className="bg-secondary flex p-2 items-center justify-between rounded">
               <div className="flex items-center gap-2">
                 {x.author.image ? (
                   <Avatar className="h-4 w-4">

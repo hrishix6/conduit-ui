@@ -84,7 +84,7 @@ export function ArticleListItem({
           <p className="text-muted-foreground">{description}</p>
         </section>
       </Link>
-      <footer className="flex items-center justify-between">
+      <footer className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
         <Link to={`/article/${slug}`}>
           <p className="text-sm text-muted-foreground">Read more...</p>
         </Link>
