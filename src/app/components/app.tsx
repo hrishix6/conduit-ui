@@ -5,7 +5,7 @@ import {
   selectErrorMessage,
 } from '../stores/app.reducer';
 import { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter} from 'react-router-dom';
 import { AppError } from './app.error';
 import { AppLoader } from './app.loader';
 import { initAppDataAsync } from '../stores/app.async.actions';
@@ -15,6 +15,83 @@ import { SignUpPage } from '@/features/auth/routes/sign.up.page';
 import EditorPage from '@/features/editor/routes/editor.page';
 import { ArticleDetail } from '@/features/article';
 import { UserProfilePage } from '@/features/profile';
+import { Layout } from '@/layout';
+import UserSettingsPage from '@/features/profile/routes/user.settings.page';
+import { ErrorPage } from '@/routes/error.page';
+import NotFoundPage from '@/routes/not.found.page';
+import { getUserInfo } from '../api';
+import { getUserProfile } from '@/features/profile/api';
+import { ProtectedRoute } from '@/routes/protected.route';
+
+const mainRouter = createBrowserRouter([
+  {
+      path: "/",
+      element: <Layout />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />
+        },
+        {
+          path: "login",
+          element: <LoginPage /> 
+        },
+        {
+          path: "register",
+          element: <SignUpPage />
+        },
+        {
+          path: "article/:slug",
+          element: <ArticleDetail />
+        },
+        {
+          path: "editor",
+          element: <EditorPage />
+        },
+        {
+          path: "profile/:username",
+          element: <UserProfilePage />,
+          loader: async ({params})=> {
+              const {username} = params;
+
+              const profile = await getUserProfile(username || "");
+
+              if(!profile)
+              {
+                throw new Error("No data");
+              }
+
+              return {data: profile};
+          },
+          children: [
+            {
+              path: "favourite",
+              element: <UserProfilePage />
+            }
+          ]
+        },
+        {
+          path: "settings",
+          element: (<ProtectedRoute><UserSettingsPage /></ProtectedRoute>) ,
+          loader: async () => {
+              const userInfo = await getUserInfo();
+
+              if(!userInfo)
+              {
+                throw new Error("No data");
+              }
+              return {data: userInfo};
+          }
+        }
+      ]
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />
+  }
+]);
+
 
 export function App() {
   const dispatch = useAppDispatch();
@@ -35,18 +112,6 @@ export function App() {
   }
 
   return (
-    <Routes>
-      <Route index path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<SignUpPage />} />
-      <Route path="/editor" element={<EditorPage />} />
-      <Route path="/article" />
-      <Route path="/article/:slug" element={<ArticleDetail />} />
-      <Route path="/profile/:username" element={<UserProfilePage />} />
-      <Route
-        path="/profile/:username/favourite"
-        element={<UserProfilePage />}
-      />
-    </Routes>
+    <RouterProvider router={mainRouter} />
   );
 }

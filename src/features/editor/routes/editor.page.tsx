@@ -1,11 +1,9 @@
-import { Layout } from '@/layout';
 import { Container } from '@/layout/container';
 import { ProtectedRoute } from '@/routes/protected.route';
 
 export default function EditorPage() {
   return (
     <ProtectedRoute>
-      <Layout>
         <Container>
           <h1 className="text-4xl">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti
@@ -69,7 +67,6 @@ export default function EditorPage() {
             necessitatibus dolores officiis illum sint explicabo.
           </h1>
         </Container>
-      </Layout>
     </ProtectedRoute>
   );
 }

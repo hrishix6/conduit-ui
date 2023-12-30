@@ -6,7 +6,6 @@ import {
   removeArticleFromFavourites,
 } from '../api';
 import { Article, Author } from '../types';
-import { Layout } from '@/layout';
 import { Container } from '@/layout/container';
 import { Heart, Loader, Plus, User } from 'lucide-react';
 import JohnTrevoltaGif from '@/assets/giphy.gif';
@@ -99,16 +98,14 @@ export function ArticleDetail() {
 
   if (loading) {
     return (
-      <Layout>
         <div className="flex items-center justify-center">
           <Loader className="h-5 w-5 text-primary animate-spin" />
-        </div>
-      </Layout>
+        </div>  
     );
   }
 
   return (
-    <Layout>
+    <>
       {article ? (
         <div className="mb-10">
           <header className="border-b border-t bg-secondary">
@@ -204,6 +201,6 @@ export function ArticleDetail() {
           </div>
         </Container>
       )}
-    </Layout>
+    </>
   );
 }

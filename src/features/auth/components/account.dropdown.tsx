@@ -28,7 +28,11 @@ export function AccountDropdown() {
           Profile
         </DropdownMenuItem>
         </Link>
-        
+        <Link to={`/settings`}>
+        <DropdownMenuItem>
+          Settings
+        </DropdownMenuItem>
+        </Link>
         <DropdownMenuItem onClick={() => dispatch(logout())}>
           Logout
         </DropdownMenuItem>

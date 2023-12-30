@@ -1,16 +1,15 @@
-import React from 'react';
 import Navbar from './navbar';
 import Footer from './footer';
+import { Outlet } from 'react-router-dom';
 
-interface Props {
-  children?: React.ReactNode;
-}
 
-export function Layout({ children }: Props) {
+export function Layout() {
   return (
     <div className='overflow-x-hidden'>
       <Navbar />
-      <main className="mb-10">{children}</main>
+      <main className="mb-10">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );

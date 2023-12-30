@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '@/hooks';
 import { AppErrorCode, loginSuccess, selectIsAuthenticated } from '@/app';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { attemptSignUp } from '../api';
-import { Layout } from '@/layout';
 import { Container } from '@/layout/container';
 
 export function SignUpPage() {
@@ -44,7 +43,6 @@ export function SignUpPage() {
   }
 
   return (
-    <Layout>
       <Container>
         <section className="flex justify-center mt-10">
           <div className="w-[550px] max-w-sm border-solid p-4 flex flex-col gap-5">
@@ -126,6 +124,5 @@ export function SignUpPage() {
           </div>
         </section>
       </Container>
-    </Layout>
   );
 }
