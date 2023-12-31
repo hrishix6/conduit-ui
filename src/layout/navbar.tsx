@@ -35,13 +35,6 @@ export function NavOptions()
 
     return (
         <div className="flex items-center">
-            <Button variant={"ghost"} onClick={()=> navigate("/")}>
-                <span
-                 className={pathname == "/" ? "text-primary font-semibold": "text-muted-foreground"}
-                >
-                    Home
-                </span>
-            </Button>
             <Button variant={"ghost"} onClick={()=> navigate("/login")}>
             <span
                  className={pathname.startsWith("/login")? "text-primary font-semibold": "text-muted-foreground"}
@@ -65,7 +58,7 @@ export default function Navbar() {
    
 
   return (
-    <nav className="px-4 xl:px-0 py-2">
+    <nav className="px-2 xl:px-0 py-2">
         <Container>
             <div className="flex items-center justify-between">
                 <Link to={`/`}>
